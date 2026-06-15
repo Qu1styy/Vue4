@@ -16,7 +16,7 @@ export default {
     return {
       username: "",
       password: "",
-    },
+    };
   },
   methods: {
     login() {
@@ -30,7 +30,7 @@ export default {
           .then(() => this.$router.push("/"));
     },
   },
-}
+};
 </script>
 
 <style scoped>
