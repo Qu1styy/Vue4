@@ -1,12 +1,14 @@
 import { createStore } from 'vuex';
-import { loginRequest, registerRequest, logoutRequest } from "@/utils/api";
+import { loginRequest, registerRequest, logoutRequest, getProductsRequest } from "@/utils/api";
 
 export default createStore({
   state: {
     token: localStorage.getItem('myAppToken') || '',
+      products: [],
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
+      products: (state) => state.products,
   },
   mutations: {
     AUTH_SUCCESS: (state, token) => {
@@ -17,6 +19,9 @@ export default createStore({
     },
       LOGOUT(state) {
           state.token = "";
+      },
+      SET_PRODUCTS(state, products) {
+          state.products = products;
       },
   },
   actions: {
@@ -60,6 +65,12 @@ export default createStore({
                   console.error(error);
                   commit("LOGOUT");
                   localStorage.removeItem("myAppToken");
+              });
+      },
+      GET_PRODUCTS: ({ commit, state }) => {
+          return getProductsRequest(state.token)
+              .then((products) => {
+                  commit("SET_PRODUCTS", products);
               });
       },
   },
