@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { loginRequest, registerRequest } from "@/utils/api";
+import { loginRequest, registerRequest, logoutRequest } from "@/utils/api";
 
 export default createStore({
   state: {
@@ -14,7 +14,10 @@ export default createStore({
     },
     AUTH_ERROR: (state) => {
       state.token = '';
-    }
+    },
+      LOGOUT(state) {
+          state.token = "";
+      },
   },
   actions: {
     AUTH_REQUEST: ({ commit }, user) => {
@@ -47,6 +50,18 @@ export default createStore({
             });
       });
     },
+      LOGOUT: ({ commit, state }) => {
+          return logoutRequest(state.token)
+              .then(() => {
+                  commit("LOGOUT");
+                  localStorage.removeItem("myAppToken");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  commit("LOGOUT");
+                  localStorage.removeItem("myAppToken");
+              });
+      },
   },
   modules: {
   }
