@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { loginRequest } from '@/utils/api.js';
+import { loginRequest, registerRequest } from "@/utils/api";
 
 export default createStore({
   state: {
@@ -31,7 +31,22 @@ export default createStore({
               reject();
             })
       })
-    }
+    },
+    REGISTER_REQUEST: ({ commit }, user) => {
+      return new Promise((resolve, reject) => {
+        registerRequest(user)
+            .then((token) => {
+              commit("AUTH_SUCCESS", token);
+              localStorage.setItem("myAppToken", token);
+              resolve();
+            })
+            .catch((error) => {
+              commit("AUTH_ERROR");
+              localStorage.removeItem("myAppToken");
+              reject(error);
+            });
+      });
+    },
   },
   modules: {
   }
