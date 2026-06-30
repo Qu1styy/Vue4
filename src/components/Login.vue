@@ -1,8 +1,8 @@
 <template>
   <form class="login" @submit.prevent="login">
     <h1>Sign in</h1>
-    <label>User name</label>
-    <input type="text" required v-model="username">
+    <label>Email</label>
+    <input type="text" required v-model="email">
     <label>Password</label>
     <input type="password" required v-model="password">
     <hr />
@@ -14,19 +14,19 @@
 export default {
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
     };
   },
   methods: {
     login() {
       const userData ={
-        username: this.username,
+        email: this.email,
         password: this.password,
       };
 
       this.$store
-          .dispatch(AUTH_REQUEST, userData)
+          .dispatch('AUTH_REQUEST', userData)
           .then(() => this.$router.push("/"));
     },
   },
