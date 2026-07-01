@@ -22,7 +22,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('../views/HomeView.vue'),
-    beforeEnter: ifAuthenticated,
   },
   {
     path: '/login',
@@ -35,6 +34,18 @@ const routes = [
     name: "register",
     component: () => import("../components/Register.vue"),
     beforeEnter: ifNotAuthenticated,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../components/Cart.vue"),
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: "/logout",
+    name: "logout",
+    component: () => import("../components/Logout.vue"),
+    beforeEnter: ifAuthenticated,
   },
 
 ];

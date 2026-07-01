@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import { loginRequest, registerRequest, logoutRequest, getProductsRequest, addToCartRequest, getCartRequest } from "@/utils/api";
+import { loginRequest, registerRequest, logoutRequest, getProductsRequest, addToCartRequest, getCartRequest, removeFromCartRequest  } from "@/utils/api";
 
 export default createStore({
   state: {
@@ -9,8 +9,8 @@ export default createStore({
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
-      products: (state) => state.products,
-      cart: (state) => state.cart,
+    products: (state) => state.products,
+    cart: (state) => state.cart,
   },
   mutations: {
     AUTH_SUCCESS: (state, token) => {
@@ -86,6 +86,9 @@ export default createStore({
               .then(cart => {
                   commit("SET_CART", cart);
               });
+      },
+      REMOVE_FROM_CART: ({ state }, id) => {
+          return removeFromCartRequest(state.token, id);
       },
   },
   modules: {

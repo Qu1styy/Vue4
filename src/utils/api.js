@@ -125,5 +125,22 @@ export const getCartRequest = (token) => {
             return result.data;
 
         });
+};
 
+export const removeFromCartRequest = (token, id) => {
+    return fetch(`${API}/cart/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+    }).then(async (response) => {
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw result;
+        }
+
+        return result;
+    });
 };
