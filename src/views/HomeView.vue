@@ -22,8 +22,16 @@
           {{ product.price }} ₽
         </div>
 
-        <button class="buy-btn">
-          В корзину
+        <button
+            class="buy-btn"
+            :class="{ added: isInCart(product.id) }"
+            :disabled="isInCart(product.id)"
+            @click="addToCart(product.id)"
+        >
+          {{ isInCart(product.id)
+            ? "✓ Добавлено"
+            : "В корзину"
+          }}
         </button>
       </div>
     </div>
@@ -41,6 +49,15 @@ export default {
             this.$router.push("/login");
           });
     },
+    isInCart(productId) {
+      return this.cart.some(item => item.product_id === productId);
+    },
+    addToCart(id) {
+      this.$store.dispatch("ADD_TO_CART", id)
+          .then(() => {
+            return this.$store.dispatch("GET_CART");
+          });
+    }
   },
   name: 'HomeView',
   components: {
@@ -49,9 +66,13 @@ export default {
     products() {
       return this.$store.getters.products;
     },
+    cart() {
+      return this.$store.getters.cart;
+    },
   },
   mounted() {
     this.$store.dispatch("GET_PRODUCTS");
+    this.$store.dispatch("GET_CART");
   },
 }
 </script>

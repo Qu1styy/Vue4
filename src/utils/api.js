@@ -76,3 +76,54 @@ export const getProductsRequest = (token) => {
             return result.data;
         });
 };
+
+export const addToCartRequest = (token, productId) => {
+    return fetch(`${API}/cart/${productId}`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json;charset=UTF-8",
+        },
+    })
+        .then(async (response) => {
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw result;
+            }
+
+            return result;
+        });
+};
+
+export const getCartRequest = (token) => {
+
+    return fetch(`${API}/cart`, {
+
+        method: "GET",
+
+        headers: {
+
+            Authorization: `Bearer ${token}`,
+
+            "Content-Type": "application/json;charset=UTF-8",
+
+        },
+
+    })
+
+        .then(async (response) => {
+
+            const result = await response.json();
+
+            if (!response.ok) {
+
+                throw result;
+
+            }
+
+            return result.data;
+
+        });
+
+};

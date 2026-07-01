@@ -1,14 +1,16 @@
 import { createStore } from 'vuex';
-import { loginRequest, registerRequest, logoutRequest, getProductsRequest } from "@/utils/api";
+import { loginRequest, registerRequest, logoutRequest, getProductsRequest, addToCartRequest, getCartRequest } from "@/utils/api";
 
 export default createStore({
   state: {
     token: localStorage.getItem('myAppToken') || '',
       products: [],
+      cart: [],
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
       products: (state) => state.products,
+      cart: (state) => state.cart,
   },
   mutations: {
     AUTH_SUCCESS: (state, token) => {
@@ -22,6 +24,9 @@ export default createStore({
       },
       SET_PRODUCTS(state, products) {
           state.products = products;
+      },
+      SET_CART(state, cart) {
+          state.cart = cart;
       },
   },
   actions: {
@@ -71,6 +76,15 @@ export default createStore({
           return getProductsRequest(state.token)
               .then((products) => {
                   commit("SET_PRODUCTS", products);
+              });
+      },
+      ADD_TO_CART: ({ state }, productId) => {
+          return addToCartRequest(state.token, productId);
+      },
+      GET_CART: ({ commit, state }) => {
+          return getCartRequest(state.token)
+              .then(cart => {
+                  commit("SET_CART", cart);
               });
       },
   },
