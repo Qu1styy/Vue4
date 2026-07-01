@@ -9,11 +9,11 @@ export const loginRequest = (user) => {
             },
             body: JSON.stringify(user),
         })
-        .then(response => response.json())
+            .then(response => response.json())
             .then((result) => resolve(result.data.user_token))
-        .catch((error) => {
-            reject(error)
-        });
+            .catch((error) => {
+                reject(error)
+            });
     });
 };
 
@@ -28,12 +28,10 @@ export const registerRequest = (user) => {
         })
             .then(async (response) => {
                 const result = await response.json();
-
                 if (!response.ok) {
                     reject(result);
                     return;
                 }
-
                 resolve(result.data.user_token);
             })
             .catch((error) => reject(error));
@@ -68,11 +66,9 @@ export const getProductsRequest = (token) => {
     })
         .then(async (response) => {
             const result = await response.json();
-
             if (!response.ok) {
                 throw result;
             }
-
             return result.data;
         });
 };
@@ -87,43 +83,26 @@ export const addToCartRequest = (token, productId) => {
     })
         .then(async (response) => {
             const result = await response.json();
-
             if (!response.ok) {
                 throw result;
             }
-
             return result;
         });
 };
-
 export const getCartRequest = (token) => {
-
     return fetch(`${API}/cart`, {
-
         method: "GET",
-
         headers: {
-
             Authorization: `Bearer ${token}`,
-
             "Content-Type": "application/json;charset=UTF-8",
-
         },
-
     })
-
         .then(async (response) => {
-
             const result = await response.json();
-
             if (!response.ok) {
-
                 throw result;
-
             }
-
             return result.data;
-
         });
 };
 
@@ -144,3 +123,48 @@ export const removeFromCartRequest = (token, id) => {
         return result;
     });
 };
+
+export const createOrder = () => {
+    const token = localStorage.getItem("myAppToken");
+    return new Promise((resolve, reject) => {
+        fetch(`${API}/order`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.data) {
+                    resolve(result.data);
+                } else {
+                    reject(result.error);
+                }
+            })
+            .catch(error => {
+                reject(error);
+            })
+    });
+};
+
+export const getOrders = () => {
+    const token = localStorage.getItem("myAppToken");
+    return new Promise((resolve, reject) => {
+        fetch(`${API}/order`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.data) {
+                    resolve(result.data);
+                } else {
+                    reject(result.error);
+                }
+            })
+            .catch(error => reject(error))
+    })
+}
